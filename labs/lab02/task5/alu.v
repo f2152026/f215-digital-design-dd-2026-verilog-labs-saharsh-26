@@ -13,27 +13,25 @@
 // and re-test before submitting.
 
 module alu (
-  input      [3:0] a,
-  input      [3:0] b,
-  input             op,      // 0 = add, 1 = sub
+  input [3:0] a,
+  input [3:0] b,
+  input op,
   output reg [3:0] result
 );
-
   reg [3:0] b_inv;
   reg [3:0] b_twos;
 
-  always @(a, b) begin
+  always @(a, b, op) begin
     case (op)
       1'b0: begin
-        result = a + b;                 // add
+        result = a + b;
       end
       1'b1: begin
-        b_inv  <= ~b;                   // sub, via two's complement
-        b_twos <= b_inv + 1;
-        result <= a + b_twos;
+        b_inv = ~b;
+        b_twos = b_inv + 1'b1;
+        result = a + b_twos;
       end
+      default: result = 4'bxxxx;
     endcase
   end
-
 endmodule
-
